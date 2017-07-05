@@ -37,11 +37,6 @@ class LoginViewController: UIViewController, LoginViewModelDelegate, WarningDele
             viewModel.delegate = self
         }
         updateAccountLoginDisplay()
-        //testing only get rid of later
-        emailTextField.text = "spencer.wallsworth@gmail.com"
-        passwordTextField.text = "treeman"
-        verifyPasswordTextField.text = "treeman"
-        //end
         super.viewDidLoad()
 
 
