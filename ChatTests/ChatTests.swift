@@ -7,6 +7,9 @@
 //
 
 import XCTest
+import Foundation
+
+
 @testable import Chat
 
 class ChatTests: XCTestCase {

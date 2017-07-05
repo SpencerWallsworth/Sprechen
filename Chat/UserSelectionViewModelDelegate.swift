@@ -7,3 +7,7 @@
 //
 
 import Foundation
+protocol UserSelectionViewModelDelegate{
+    func selectUser(indexPath:IndexPath)
+    func updateView()
+}

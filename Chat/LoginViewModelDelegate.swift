@@ -7,3 +7,10 @@
 //
 
 import Foundation
+protocol LoginViewModelDelegate: class{
+    func invalidLogin(message:String)
+    func invalidAccountCreation(message:String)
+    func validLogin()
+    func errorSigningingOut(message:String)
+    func updateView()
+}

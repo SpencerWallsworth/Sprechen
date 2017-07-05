@@ -7,3 +7,6 @@
 //
 
 import Foundation
+protocol ImageURLDelegate: class{
+    func retrieveImage(string: String)
+}

@@ -7,3 +7,9 @@
 //
 
 import Foundation
+struct User{
+    var id: String?
+    var name: String?
+    var imageURL: String?
+    var posts:[String]?
+}

@@ -7,3 +7,6 @@
 //
 
 import Foundation
+protocol WarningDelegate{
+    func showWarning(message: String)
+}

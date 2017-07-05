@@ -10,6 +10,9 @@ import UIKit
 
 class ImageURLViewController: UIViewController {
 
+    weak var delegate: ImageURLDelegate?
+    
+    @IBOutlet weak var urlTextField: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,6 +22,12 @@ class ImageURLViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    @IBAction func search(_ sender: UIButton) {
+        delegate?.retrieveImage(string: urlTextField.text!)
+        self.dismiss(animated: true, completion: nil)
     }
     
 
