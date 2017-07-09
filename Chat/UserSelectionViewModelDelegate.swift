@@ -8,6 +8,6 @@
 
 import Foundation
 protocol UserSelectionViewModelDelegate{
-    func selectUser(indexPath:IndexPath)
     func updateView()
+    func updateView(for indexPath:IndexPath)
 }

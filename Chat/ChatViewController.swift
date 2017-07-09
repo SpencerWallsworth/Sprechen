@@ -10,7 +10,10 @@ import UIKit
 import AVFoundation
 
 class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITabBarDelegate, UIPopoverPresentationControllerDelegate, ImageURLDelegate, WarningDelegate, UserSelectionViewModelDelegate{
+  
 
+    //Dictonary for storing image downloads in progress
+    
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -32,9 +35,8 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
-
+        
         let nib = UINib(nibName: "UserChatTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "userChatCell")
         imagePicker.delegate = self
@@ -45,8 +47,11 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
     }
 
-  
-
+    deinit {
+    }
+    
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -113,16 +118,16 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let cell = tableView.dequeueReusableCell(withIdentifier: "userChatCell") as!UserChatTableViewCell
         
         //Set cell text label
-        cell.userName.text = userSelectionViewModel?.getUserAtRow(indexPath: indexPath).name
+        let user = userSelectionViewModel?.getUserAtRow(indexPath: indexPath)
+        cell.userName.text = user?.name
         
-        
-        //Set cell image
-        let url = userSelectionViewModel?.getUserImageURL(indexPath: indexPath)
-        DataService.shared.getDataFromURL(url: url!) { (data, response, error) in
-            if error == nil && data != nil{
-                DispatchQueue.main.async {
-                    cell.profileImageView.image = UIImage(data: data!)
-                }
+        if !tableView.isDragging && !tableView.isDecelerating{
+            //Set cell image
+            if user?.image == nil{
+                userSelectionViewModel?.queryImage(for: indexPath)
+                cell.profileImageView.image = #imageLiteral(resourceName: "photoIcon")
+            }else{
+                cell.profileImageView.image = user?.image
             }
         }
         return cell
@@ -134,33 +139,33 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         vc.user = user
         self.navigationController?.pushViewController(vc, animated: true)
     }
-  
+    
+    
+    
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.none
     }
     
     // Mark: - UserSelectionViewDelegate methods
-    func selectUser(indexPath: IndexPath) {
         
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+       //load images
+        tableView.reloadData()
     }
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        if !scrollView.isDecelerating{
+            //load images
+            tableView.reloadData()
+        }
+    }
+    
     func updateView() {
         self.name.text =  userSelectionViewModel?.getUserName(email: email!)
         tableView.reloadData()
     }
-    
-
-    
-    
-    //TODO: Network request here, refactor it out
-   
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+    func updateView(for indexPath: IndexPath){
+        tableView.reloadRows(at: [indexPath], with: .fade)
     }
-    */
-
+    
 }
